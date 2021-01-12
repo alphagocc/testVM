@@ -7,20 +7,35 @@ on:
 
 jobs:
   Instance:
-    runs-on: macos-latest
-
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest]
+        build_type: [Release, RelWithDebInfo]
+        qt_ver: [6.0.0]
+        qt_arch: [clang_64]
+    env:
+      targetName: lemon
     steps:
     - name: Checkout
       uses: actions/checkout@main
 
     - name: Run Start Script
       run: source macos-start.sh
+    - name: Cache Qt
+      id: cache-qt
+      uses: actions/cache@v1
+      with:
+        path: ../Qt
+        key: ${{ runner.os }}-QtCache
 
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
+      with:
+        cached: ${{ steps.cache-qt.outputs.cache-hit }}
+      
     - name: Start SSH via tmate
       uses: P3TERX/ssh2actions@main
-      env:
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
     - name: Run End Script
       run: source macos-end.sh
