@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest]
-        build_type: [Release, RelWithDebInfo]
+        build_type: [Release]
         qt_ver: [6.0.0]
         qt_arch: [clang_64]
     env:
@@ -22,17 +22,11 @@ jobs:
 
     - name: Run Start Script
       run: source macos-start.sh
-    - name: Cache Qt
-      id: cache-qt
-      uses: actions/cache@v1
-      with:
-        path: ../Qt
-        key: ${{ runner.os }}-QtCache
-
+      
     - name: Install Qt
       uses: jurplel/install-qt-action@v2
       with:
-        cached: ${{ steps.cache-qt.outputs.cache-hit }}
+        version: ${{ matrix.qt_ver }}
       
     - name: Start SSH via tmate
       uses: P3TERX/ssh2actions@main
