@@ -23,10 +23,10 @@ jobs:
     - name: Run Start Script
       run: source macos-start.sh
       
-    - name: Install Qt
-      uses: jurplel/install-qt-action@v2
-      with:
-        version: ${{ matrix.qt_ver }}
+    #- name: Install Qt
+    #  uses: jurplel/install-qt-action@v2
+    #  with:
+    #    version: ${{ matrix.qt_ver }}
       
     - name: Start SSH via tmate
       uses: P3TERX/ssh2actions@main
